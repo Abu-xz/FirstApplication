@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup</title>
@@ -10,14 +10,15 @@
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
       crossorigin="anonymous"
     />
-  </head>
+  
+  
   <body>
 
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid px-4">
-          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">USER LOGIN</span>
+          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">ADMIN LOGIN</span>
           <dvi>
-            <a href="/admin/login" class="btn btn-warning">Admin Login</a>
+            <a href="/user/login" class="btn btn-warning">User Login</a>
           </dvi>
         </div>
       </nav>
@@ -30,14 +31,14 @@
                 <h3 style="color: red;"><%= errorMessage %></h3>
                <% } %>   
                   
-                <form action="/user/logged" method="post"> 
+                <form action="/admin/verify" method="post"> 
                     <div class="mb-3">
-                        <label class="form-label">User name</label>
+                        <label class="form-label">Name</label>
                         <input type="text" name="name" class="form-control" >
                       </div>
 
                     <div class="mb-3">
-                      <label class="form-label">Email address</label>
+                      <label class="form-label">Email</label>
                       <input type="email" class="form-control" name="email">
                     </div>
 
@@ -50,10 +51,7 @@
                       <div>
                         <button type="submit" class="btn btn-primary ">Submit</button>
                       </div>
-                      <div class="mt-2"> 
-                        <p>create account <a href="/user/signup">Sign up</a></p>
-                        
-                      </div>
+                      
                   </div>
                   </form>
             </div>

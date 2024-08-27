@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup</title>
+    <title>Create</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -15,9 +15,9 @@
 
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid px-4">
-          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">USER LOGIN</span>
+          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">CREATE USER</span>
           <dvi>
-            <a href="/admin/login" class="btn btn-warning">Admin Login</a>
+            <a href="/admin/panel" class="btn btn-warning">Go Back</a>
           </dvi>
         </div>
       </nav>
@@ -26,11 +26,8 @@
         <div class="row justify-content-center">
             <div class="col-12 "  style="max-width: 550px;">
 
-              <% if (typeof errorMessage != 'undefined'){ %>
-                <h3 style="color: red;"><%= errorMessage %></h3>
-               <% } %>   
                   
-                <form action="/user/logged" method="post"> 
+                <form action="/admin/create" method="post"> 
                     <div class="mb-3">
                         <label class="form-label">User name</label>
                         <input type="text" name="name" class="form-control" >
@@ -49,11 +46,7 @@
                     <div class="d-flex justify-content-between">
                       <div>
                         <button type="submit" class="btn btn-primary ">Submit</button>
-                      </div>
-                      <div class="mt-2"> 
-                        <p>create account <a href="/user/signup">Sign up</a></p>
-                        
-                      </div>
+                      </div>    
                   </div>
                   </form>
             </div>

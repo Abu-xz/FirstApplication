@@ -14,36 +14,33 @@
   <body>
 
     <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid px-4">
-          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">USER LOGIN</span>
-          <dvi>
-            <a href="/admin/login" class="btn btn-warning">Admin Login</a>
-          </dvi>
+        <div class="container-fluid px-5">
+          <span class="navbar-brand mb-0 h1 mx-5 text-success fw-bold">USER SIGNUP</span>
         </div>
       </nav>
 
     <div class="container p-5">
         <div class="row justify-content-center">
             <div class="col-12 "  style="max-width: 550px;">
+              <% if (typeof alreadyExists !== 'undefined'){ %>
+               <h3 style="color: red;"><%= alreadyExists %></h3>
+              <% } %>
 
-              <% if (typeof errorMessage != 'undefined'){ %>
-                <h3 style="color: red;"><%= errorMessage %></h3>
-               <% } %>   
-                  
-                <form action="/user/logged" method="post"> 
+                <form action="/user/signup" id="signupForm" method="post"> 
                     <div class="mb-3">
                         <label class="form-label">User name</label>
-                        <input type="text" name="name" class="form-control" >
+                        <input type="text" id="name" name="name" class="form-control" required>
                       </div>
 
                     <div class="mb-3">
                       <label class="form-label">Email address</label>
-                      <input type="email" class="form-control" name="email">
+                      <input type="email" class="form-control" id="email" name="email" required>
+                      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
                     </div>
 
                     <div class="mb-3">
                       <label for="exampleInputPassword1" class="form-label">Password</label>
-                      <input type="password" class="form-control" name="password">
+                      <input type="password" class="form-control" id="password" name="password" required>
                     </div>
 
                     <div class="d-flex justify-content-between">
@@ -51,10 +48,11 @@
                         <button type="submit" class="btn btn-primary ">Submit</button>
                       </div>
                       <div class="mt-2"> 
-                        <p>create account <a href="/user/signup">Sign up</a></p>
+                        <p>Have an account? <a href="/user/login">Log in</a></p>
                         
                       </div>
                   </div>
+                    
                   </form>
             </div>
         </div>
