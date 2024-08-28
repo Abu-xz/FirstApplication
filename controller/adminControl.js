@@ -22,14 +22,18 @@ export const adminVerify = async (req, res) => {
       return res.render("adminLogin", { errorMessage });
     }
   
-    if (name === admin.name && password === admin.password) {
-      return res.redirect("/admin/panel");
-    } else {
+    if (name != admin.name || password != admin.password) {
       errorMessage = "Invalid credentials! Please check your name and password.";
       return res.render("adminLogin", { errorMessage });
     }
+
+      req.session.admin = true;
+      res.cookie("admin", admin.name);
+
+      return res.redirect("/admin/panel");
+    
   } catch (error) {
-    console.log(error.message);
+    return res.render("adminLogin", {errorMessage: "Something went wrong!"})
   }
   
 };
@@ -37,8 +41,8 @@ export const adminVerify = async (req, res) => {
 //Admin Panel
 export const adminPanel = async (req, res) => {
   try {
-    const users = await User.find();
-    res.render("adminPanel", { users });
+    const user = await User.find().sort({name: 1});
+    res.render("adminPanel", { user });
   } catch (error) {
     console.log(error)
   }
@@ -133,6 +137,7 @@ export const newUser = async (req, res) =>{
     res.redirect("/admin/panel")
 
   } catch (error) {
+    console.log(error);
     
   }
 }

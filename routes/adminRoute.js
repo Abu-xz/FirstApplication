@@ -11,27 +11,33 @@ import {
   newUser
 } from "../controller/adminControl.js";
 
+import {
+  isAuthorized,
+  isAdmin
+} from "../middlewares/adminAuth.js"
+
+
 const router = express.Router();
 
 // Admin login
-router.get("/login", adminLog);
-router.post("/verify", adminVerify);
+router.get("/login", isAuthorized,  adminLog);
+router.post("/login", isAuthorized, adminVerify);
 
 // Admin Panel
-router.get("/panel", adminPanel);
+router.get("/panel", isAdmin, adminPanel);
 
 //Admin search
-router.post("/search", search);
+router.post("/search", isAdmin,  search);
 
 //Admin edit
-router.get("/edit/:userId", editUser);
-router.post("/edit/:userId", updateUser);
+router.get("/edit/:userId", isAdmin, editUser);
+router.post("/edit/:userId", isAdmin, updateUser);
 
 //Admin delete
-router.get("/delete/:userId", deleteUser);
+router.get("/delete/:userId", isAdmin, deleteUser);
 
 //Admin create
-router.get('/create', createUser);
-router.post('/create', newUser);
+router.get('/create', isAdmin, createUser);
+router.post('/create', isAdmin, newUser);
 
 export default router;

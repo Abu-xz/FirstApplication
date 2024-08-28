@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 //Route importing 
 import userRoute from "./routes/userRoute.js";
 import adminRoute from "./routes/adminRoute.js";
+import {isAdmin} from "./middlewares/adminAuth.js"
 
 //Dotenv configuration
 dotenv.config();
@@ -26,8 +27,13 @@ app.use(session({
   secret: 'xdv14nmjad',
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
 }));
+
+// Cache-Control Middleware
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');  // Prevent caching for all routes
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

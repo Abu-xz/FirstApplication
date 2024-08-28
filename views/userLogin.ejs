@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signup</title>
+    <title>LoginPage</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -29,8 +29,12 @@
               <% if (typeof errorMessage != 'undefined'){ %>
                 <h3 style="color: red;"><%= errorMessage %></h3>
                <% } %>   
+
+               <% if (typeof validationError !== 'undefined'){ %>
+                <p style="color: red;"><%= validationError %></p>
+               <% } %>
                   
-                <form action="/user/logged" method="post"> 
+                <form action="/user/login" method="post"> 
                     <div class="mb-3">
                         <label class="form-label">User name</label>
                         <input type="text" name="name" class="form-control" >

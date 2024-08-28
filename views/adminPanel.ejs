@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>AdminPanel</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -59,13 +59,13 @@
               </thead>                      
               <tbody>
                
-                <% users.forEach( user => { %>
+                <% user.forEach( val => { %>
                   <tr>
-                    <td><%= user.name %></td>
-                    <td><%= user.email %></td>
+                    <td><%= val.name %></td>
+                    <td><%= val.email %></td>
                     <td><div class="d-flex ">
-                      <a href="/admin/edit/<%= user._id %>" class="text-info"> <i class="bi bi-pencil-square me-4"></i> </a>
-                      <a href="/admin/delete/<%= user._id %>"> <i class="bi bi-trash-fill" style="color: red;" ></i></a>
+                      <a href="/admin/edit/<%= val._id %>" class="text-info"> <i class="bi bi-pencil-square me-4"></i> </a>
+                      <a href="/admin/delete/<%= val._id %>"> <i class="bi bi-trash-fill" style="color: red;" ></i></a>
                     </div></td>
                   </tr>
                <%  }); %>

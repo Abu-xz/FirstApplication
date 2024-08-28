@@ -1,73 +1,109 @@
 import User from "../model/userModel.js";
+import bcrypt, { hash } from "bcrypt";
 
-// ----------------------------- Signup control -------------------------------- // 
+// ----------------------------- Signup control -------------------------------- //
 //Get route
 export const userSignup = async (req, res) => {
-    res.render("userSignup");
+   return res.render("userSignup");
 };
 
 // Post route and User creation
 export const userCreate = async (req, res) => {
-    try {
-        const {email} = req.body
-        const userExist = await User.findOne({email});
-        if(userExist){
-            let alreadyExists = 'User already exists!'
-            res.render('userSignup', {alreadyExists});
-        }
-        const newUser = new User(req.body);
-        await newUser.save();
-        res.render('index');
-        
-    } catch (error) {
-        console.log(error);
+  try {
+    const { email, name , password} = req.body;
+  
+    const userExist = await User.findOne({ email });
+
+    if (userExist) {
+      let alreadyExists = "User already exists!";
+     return res.render("userSignup", { alreadyExists });
     }
+    //session creation for new user
+    req.session.username = name;
+    res.cookie("username", name);
+    //Password hashing
+    const hashedPassword = await bcrypt.hash(password, 10);
+    //creating user
+    const newUser = new User({email, name, password: hashedPassword});
+    await newUser.save();
+
+    res.render("index", { name });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      // Handle validation errors
+      const errorMessage = Object.values(error.errors).map(
+        (err) => err.message
+      );
+      res.render("userSignup", { errorMessage });
+    }
+  }
 };
 
-// -------------------------------- Signup control -------------------------------- // 
+// -------------------------------- Signup control -------------------------------- //
 
-// -------------------------------- login control -------------------------------- // 
+// -------------------------------- login control -------------------------------- //
 //Get route
 export const userLogin = async (req, res) => {
-    res.render("userLogin");
+  res.render("userLogin");
 };
 
 //Post route
-export const userLog  = async (req, res) => {
-    try {
-        const {email, password, name} = req.body;
-        const userExist = await User.findOne({email});
-        let errorMessage = ''
-        if(!userExist){
-            errorMessage += "User not Found";
-           return res.render('userLogin', {errorMessage});
-        };
-
-        console.log(password);
-        console.log(userExist.password);
-       
-        if(userExist.password != password){
-            errorMessage += "Wrong password";
-           return res.render("userLogin", {errorMessage})
-        }
-
-        res.render('index', {name});
-
-
-    } catch (error) {
-        console.log(error)
+export const userLog = async (req, res) => {
+  try {
+    const {name, email, password } = req.body;
+    const userExist = await User.findOne({ name, email });
+    let errorMessage = "";
+    if (!userExist) {
+      errorMessage += "User not Found";
+      return res.render("userLogin", { errorMessage });
     }
-}
 
-// -------------------------------- login control-------------------------------- // 
+    const isMatch = await bcrypt.compare(password, userExist.password)
+    if (!isMatch) {
+      errorMessage += "Wrong password";
+      return res.render("userLogin", { errorMessage });
+    }
+    //session creation for user
+    req.session.username = userExist.name;
+    res.cookie("username", userExist.name);
 
+    res.render("index", { name: userExist.name });
+  } catch (error) {
+    if (error.name === "ValidationError") {
+      // Handle validation errors
+      const validationError = Object.values(error.errors).map(
+        (err) => err.message
+      );
+      res.render("userSignup", { validationError });
+    }
+  }  
+};
+// -------------------------------- login control-------------------------------- //
 
-
-
-// -------------------------------- Home control -------------------------------- // 
+// -------------------------------- Home control -------------------------------- //
 
 export const userIndex = async (req, res) => {
-    const {name} = req.body
-    res.render("index", {name});
+  const name = req.session.username;
+  if (!name) {
+    return res.redirect("/user/login");
+  }
+  res.render("index", { name });
 };
-// -------------------------------- Home control ------------------------------ // 
+
+// Log out
+export const userLogout = (req, res) =>{
+  try{
+    req.session.destroy((err) =>{
+      if(err){
+        console.log("Failed to logout"); 
+      }
+    });
+    res.clearCookie('username');
+
+    res.redirect("/user/login");
+  }catch (error){
+    console.log(error)
+  }
+}
+
+// -------------------------------- Home control ------------------------------ //
