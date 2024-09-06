@@ -14,134 +14,132 @@ export const adminVerify = async (req, res) => {
       email: "admin@gmail.com",
       password: "admin123",
     };
-  
+
     const { name, email, password } = req.body;
     let errorMessage = "";
     if (email !== admin.email) {
       errorMessage += "Admin not found!";
       return res.render("adminLogin", { errorMessage });
     }
-  
+
     if (name != admin.name || password != admin.password) {
-      errorMessage = "Invalid credentials! Please check your name and password.";
+      errorMessage =
+        "Invalid credentials! Please check your name and password.";
       return res.render("adminLogin", { errorMessage });
     }
 
-      req.session.admin = true;
-      res.cookie("admin", admin.name);
+    req.session.admin = true;
+    res.cookie("admin", admin.name);
 
-      return res.redirect("/admin/panel");
-    
+    return res.redirect("/admin/panel");
   } catch (error) {
-    return res.render("adminLogin", {errorMessage: "Something went wrong!"})
+    return res.render("adminLogin", { errorMessage: "Something went wrong!" });
   }
-  
 };
 
 //Admin Panel
 export const adminPanel = async (req, res) => {
   try {
-    const user = await User.find().sort({name: 1});
+    const user = await User.find().sort({ name: 1 });
     res.render("adminPanel", { user });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
-
 };
 
 //Admin Search
 export const search = async (req, res) => {
   try {
-    const {search} = req.body;
-  console.log(search)
-  const searchData = await User.find({name: { $regex: search, $options: "i" ,}, email: {$regex: search, $options: "i"}});
+    const { search } = req.body;
+    const searchData = await User.find({
+      name: { $regex: search, $options: "i" },
+      email: { $regex: search, $options: "i" },
+    });
 
-   console.log(searchData._id);
-  if (searchData.length == 0) {
-    let userNotFound = "User not Found";
-    return res.render("adminSearch", { userNotFound });
-  } else{
-    res.render("adminSearch", {searchData});
-  }
+    if (searchData.length == 0) {
+      let userNotFound = "User not Found";
+      return res.render("adminSearch", { userNotFound });
+    } else {
+      res.render("adminSearch", { searchData });
+    }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
-
 //Admin Edit
-export const editUser = async (req, res) =>{
+export const editUser = async (req, res) => {
   try {
-
     const id = req.params.userId;
     const userData = await User.findById(id);
     console.log(userData);
-    if(!userData){
-     console.log("User not found for edit")
+    if (!userData) {
+      console.log("User not found for edit");
     }
-    res.render("adminEdit", {userData});
-    
+    res.render("adminEdit", { userData });
   } catch (error) {
-    console.log(error)
-  };
-
-}
+    console.log(error);
+  }
+};
 
 //Admin update
-export const updateUser = async (req, res) =>{
+export const updateUser = async (req, res) => {
   try {
     const id = req.params.userId;
     const updateData = req.body;
-    const user = await User.findByIdAndUpdate(id, updateData, {new: true});
-    if(!user){
+    const user = await User.findByIdAndUpdate(id, updateData, { new: true });
+    if (!user) {
       console.log("Can't update User data!");
-    };
+    }
     res.redirect("/admin/panel");
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 };
 
 //Admin Delete
-export const deleteUser = async (req, res) =>{
+export const deleteUser = async (req, res) => {
   try {
     const id = req.params.userId;
     const user = await User.findByIdAndDelete(id);
-    if(!user){
+    if (!user) {
       console.log("User not Found to delete");
     }
     res.redirect("/admin/panel");
   } catch (error) {
-    console.log(error) 
+    console.log(error);
   }
 };
 
-
 // Admin Create
-export const createUser = async (req, res) =>{
+export const createUser = async (req, res) => {
   res.render("adminCreate");
 };
 
-
-export const newUser = async (req, res) =>{
-
+export const newUser = async (req, res) => {
   try {
-    const {email} = req.body;
-    const userExist = await User.findOne({email});
-    if(userExist){
-      console.log("user already exist")
-     return res.render("adminCreate");
+    const { email } = req.body;
+    const userExist = await User.findOne({ email });
+    if (userExist) {
+      console.log("user already exist");
+      return res.render("adminCreate");
     }
     const newUser = new User(req.body);
     await newUser.save();
-    res.redirect("/admin/panel")
-
+    res.redirect("/admin/panel");
   } catch (error) {
     console.log(error);
-    
   }
-}
+};
 
-
-
-
+export const logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/admin/panel");
+    }
+    // Clear the admin cookie
+    res.clearCookie("admin");
+    res.redirect("/admin/login");
+  });
+};

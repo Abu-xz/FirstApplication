@@ -39,7 +39,7 @@
         
         <dvi class="col-4 d-flex justify-content-end">
           <a href="/admin/create" class="btn btn-success">Create</a>
-          <a href="/admin/login" class="btn btn-warning mx-4">Logout</a>
+          <a href="/admin/logout" class="btn btn-warning mx-4">Logout</a>
         </dvi>
 
       </div>
@@ -65,7 +65,7 @@
                     <td><%= val.email %></td>
                     <td><div class="d-flex ">
                       <a href="/admin/edit/<%= val._id %>" class="text-info"> <i class="bi bi-pencil-square me-4"></i> </a>
-                      <a href="/admin/delete/<%= val._id %>"> <i class="bi bi-trash-fill" style="color: red;" ></i></a>
+                      <a href="/admin/delete/<%= val._id %>"> <i class="bi bi-trash-fill" style="color: rgb(182, 42, 42);" ></i></a>
                     </div></td>
                   </tr>
                <%  }); %>

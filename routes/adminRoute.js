@@ -8,7 +8,8 @@ import {
   updateUser,
   deleteUser,
   createUser,
-  newUser
+  newUser,
+  logout
 } from "../controller/adminControl.js";
 
 import {
@@ -39,5 +40,8 @@ router.get("/delete/:userId", isAdmin, deleteUser);
 //Admin create
 router.get('/create', isAdmin, createUser);
 router.post('/create', isAdmin, newUser);
+
+//admin logout
+router.get("/logout", logout)
 
 export default router;

@@ -24,6 +24,11 @@ router.post("/login", userLog);
 
 // Home route
 router.get("/index", userAuth, userIndex);
-router.get('/logout', userLogout)
+
+
+router.get('/logout', userLogout);
+
+
+
 
 export default router;
